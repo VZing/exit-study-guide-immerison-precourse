@@ -63,21 +63,86 @@ var comedians = [
 
 /* Solve by chaining native methods of map and filter only */
 var comediansFilteredAndMapped = (comedians) => {
-    // Your code here
+    let answer = [];
+    comedians.filter((actor) => {
+        if (actor.begin >= 2005) {
+            return actor
+        }
+    }).map((actor) => {
+        actor.name = actor.actor;
+        actor.appearanceNumber = '#' + (actor.number);
+        actor.seasonsActive = actor.end - actor.begin + 1;
+        delete actor.actor;
+        delete actor.number;
+        delete actor.end;
+        delete actor.begin;
+        answer.push(actor);
+    })
+    console.log(answer);
+    return answer;
 
 };
 
 var comedianNamesFilteredAndMapped = (comedians) => {
     // Your code here
-
+    // - cast members added from the year 2005 to present
+    // - cast members whose __full name__ have more than 10 letters
+    let result = [];
+    comedians.filter((actor) =>{
+        if(actor.begin >= 2005){
+            result.push(actor.actor);
+        }
+    })
+    return result;
 };
 
 
 
 
 /* Solve by using native method of reduce only */
+// - cast members added from the year 2005 to present
+//     - cast members whose __full name__ have more than 10 letters
+
+// It should:
+// - Use`reduce`
+//     - Make new keys(`appearanceNumber`, `name`, and`seasonsActive`)
+// [
+//     {
+//         appearanceNumber: '#8',
+//         name: 'Sterling K. Brown',
+//         seasonsActive: 6
+//     },
+//     {
+//         appearanceNumber: '#9',
+//         name: 'Jay Pharoah',
+//         seasonsActive: 7
+//     },
+//     {
+//         appearanceNumber: '#10',
+//         name: 'Leslie Jones',
+//         seasonsActive: 5
+//     }
+// ]
+
+// - cast members added from the year 2005 to present
+//     - cast members whose __full name__ have more than 10 letters
+
+// It should:
+// - Use`reduce`
+//     - Make new keys(`appearanceNumber`, `name`, and`seasonsActive`)
 var comediansReduced1 = (comedians) => {
     // Your code here
+    return comedians.reduce((actor) =>{
+        if(actor.begin >= 2005){
+            actor.name = actor.actor;
+            actor.appearanceNumber = '#' + actor.number;
+            actor.seasonsActive = actor.end - actor.begin + 1;
+            delete actor.actor;
+            delete actor.number;
+            delete actor.begin;
+            delete actor.end;   
+        }
+    }, [])
 
 };
 
