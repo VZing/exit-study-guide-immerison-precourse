@@ -15,15 +15,71 @@
 
 const pureShuffle = array => {
     // your code here
+    //input array
+    //output different shuffled array
+    //constraints don't modify the original array
+    let newArr = array.slice();
+    let result = [];
+    const { floor, random } = Math;
+    while(newArr.length){
+        let randIndex = floor(random() * newArr.length);
+        result.push(newArr.splice(randIndex, 1)[0]);
+    }
+    return result;
 };
+
+const dirtyShuffle = (array) =>{
+    const { random, floor } = Math;
+    for(let i = array.length - 1; i > -1; i--){
+        let ele = array[i];
+        let temp = ele;
+        let randomIndex = array[floor(random) * array.length];
+       array[i] = array[randomIndex];
+       array[randomIndex] = temp;
+    }
+    return array;
+}
 
 var isPalindrome = (string) => {
     // your code here
+    //check if string.length is even number
+    //if it is, split it in half, reverse 1 half and compare them
+    //if it's an odd number, Math.floor to determine length of both halves
+    //then split it, reverse one half and compare them
+    //return a boolean
+    console.log(string)
+if(!string.length){
+    return undefined;
+}
+  string = string.toLowerCase();
+  let arr = string.split("");
+  let stringNoSpaces = arr.join("")
+ arr.reverse();
+  let joined = arr.join("");
+  if(stringNoSpaces === joined){
+      console.log(true)
+      return true;
+  }else{
+      console.log(false)
+      return false;
+  }
 }
 
-const mergeObjects = obj => {
+const mergeObjects = (...obj) => {
     // your code here
+    return Object.assign(...obj)
 };
+
+const semiMergedObjects = (obj1, ...objs) =>{
+    objs.forEach(obj => {
+        for(let key in obj){
+            if(!obj1[key]){
+                obj1[key] = obj[key];
+            }
+        }
+    })
+    return obj1;
+}
 
 
 
@@ -33,14 +89,36 @@ const mergeObjects = obj => {
 
 var replaceValuesInObj = (obj, value, newValue) => {
     // your code here
+    for(let key in obj){
+        if(obj[key] === value){
+            obj[key] = newValue;
+        } else if (obj[key] instanceof Object){
+            replaceValuesInObj(obj[key], value, newValue)
+        }
+    }
+    return obj;
 };
 
 var addKeysToExistingObj = (obj, newKey, newValue) => {
     // your code here
+    obj[newKey] = newValue;
+    for(let key in obj){
+        if(obj[key] instanceof Object){
+            addKeysToExistingObj(obj[key], newKey, newValue)
+        }
+    }
+    return obj;
 };
 
 var map = (arr, func) => {
     // your code here
+    let result = [];
+    if(arr.length){
+        result.push(func(arr[0]))
+        arr.splice(0, 1);
+        map(arr, func)
+    }
+    return result;
 }
 
 
@@ -64,23 +142,36 @@ var comedians = [
 /* Solve by chaining native methods of map and filter only */
 var comediansFilteredAndMapped = (comedians) => {
     let answer = [];
+    // comedians.filter((actor) => {
+    //     if (actor.begin >= 2005) {
+    //         return actor
+    //     }
+    // }).map((actor) => {
+    //     actor.name = actor.actor;
+    //     actor.appearanceNumber = '#' + (actor.number);
+    //     actor.seasonsActive = actor.end - actor.begin - 1;
+    //     delete actor.actor;
+    //     delete actor.number;
+    //     delete actor.end;
+    //     delete actor.begin;
+    //     answer.push(actor);
+    // })
+    // console.log(answer);
+    // return answer;
     comedians.filter((actor) => {
-        if (actor.begin >= 2005) {
-            return actor
+        if(actor.begin >= 2005){
+            return actor; 
         }
     }).map((actor) => {
-        actor.name = actor.actor;
-        actor.appearanceNumber = '#' + (actor.number);
-        actor.seasonsActive = actor.end - actor.begin + 1;
-        delete actor.actor;
-        delete actor.number;
-        delete actor.end;
-        delete actor.begin;
-        answer.push(actor);
+        let newActor = {
+            name: actor.actor,
+            appearanceNumber: '#' + actor.number,
+            seasonsActive: actor.end - actor.begin + 1
+        }
+        answer.push(newActor)
     })
-    console.log(answer);
-    return answer;
-
+    // console.log(answer)
+return answer;
 };
 
 var comedianNamesFilteredAndMapped = (comedians) => {
@@ -131,24 +222,32 @@ var comedianNamesFilteredAndMapped = (comedians) => {
 // - Use`reduce`
 //     - Make new keys(`appearanceNumber`, `name`, and`seasonsActive`)
 var comediansReduced1 = (comedians) => {
-    // Your code here
-    return comedians.reduce((actor) =>{
-        if(actor.begin >= 2005){
-            actor.name = actor.actor;
-            actor.appearanceNumber = '#' + actor.number;
-            actor.seasonsActive = actor.end - actor.begin + 1;
-            delete actor.actor;
-            delete actor.number;
-            delete actor.begin;
-            delete actor.end;   
-        }
-    }, [])
 
+
+    return comedians.reduce((reduced, actor) =>{
+      
+        if(actor.begin >= 2005){
+            let newActor = {
+                name: actor.actor,
+                appearanceNumber: '#' + actor.number,
+                seasonsActive: actor.end - actor.begin + 1,
+            }
+            reduced.push(newActor)
+        }
+        console.log(reduced)
+        return reduced;
+    }, [])
+    
 };
 
 var comediansReduced2 = (comedians) => {
     // Your code here
-
+return comedians.reduce((reduced, actor) => {
+    if(actor.begin >= 2005){
+        reduced.push(actor.actor)
+    }
+    return reduced;
+}, [])
 };
 
 
